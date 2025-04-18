@@ -1,10 +1,6 @@
 // Mock authentication service
-<<<<<<< HEAD
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
-=======
-import { v4 as uuidv4 } from 'uuid';
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
 
 // Types
 interface User {
@@ -17,18 +13,12 @@ interface StoredUser extends User {
   password: string;
 }
 
-<<<<<<< HEAD
 // Constants
 const SALT_ROUNDS = 10;
 const USER_KEY = "auth_user";
 const USERS_KEY = "auth_users";
 const LOGIN_ATTEMPTS_KEY = "login_attempts";
 const LOCKOUT_TIME_KEY = "lockout_time";
-=======
-// Local storage keys
-const USER_KEY = 'auth_user';
-const USERS_KEY = 'auth_users';
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
 
 // Helper functions
 const saveUser = (user: User): void => {
@@ -40,20 +30,14 @@ const clearUser = (): void => {
 };
 
 const getStoredUsers = (): StoredUser[] => {
-<<<<<<< HEAD
   const usersJson = localStorage.getItem(USERS_KEY);
   return usersJson ? JSON.parse(usersJson) : [];
-=======
-  const users = localStorage.getItem(USERS_KEY);
-  return users ? JSON.parse(users) : [];
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
 };
 
 const saveStoredUsers = (users: StoredUser[]): void => {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 };
 
-<<<<<<< HEAD
 const getLoginAttempts = (): number => {
   const attempts = localStorage.getItem(LOGIN_ATTEMPTS_KEY);
   return attempts ? parseInt(attempts) : 0;
@@ -90,11 +74,6 @@ const isAccountLocked = (): boolean => {
 // Simulate network delay
 const delay = (ms: number = 800): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-=======
-// Simulate network delay
-const delay = (ms: number = 800): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
 };
 
 // Auth service methods
@@ -102,7 +81,6 @@ export const authService = {
   // Get the current user from local storage
   getCurrentUser: async (): Promise<User> => {
     await delay(300);
-<<<<<<< HEAD
 
     const userJson = localStorage.getItem(USER_KEY);
     if (!userJson) {
@@ -174,55 +152,11 @@ export const authService = {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-=======
-    
-    const userJson = localStorage.getItem(USER_KEY);
-    if (!userJson) {
-      throw new Error('No authenticated user');
-    }
-    
-    return JSON.parse(userJson);
-  },
-  
-  // Login with email and password
-  login: async (email: string, password: string): Promise<User> => {
-    await delay();
-    
-    const users = getStoredUsers();
-    const user = users.find(u => 
-      u.email.toLowerCase() === email.toLowerCase() && 
-      u.password === password
-    );
-    
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-    
-    // Don't include password in the returned user object
-    const { password: _, ...userWithoutPassword } = user;
-    saveUser(userWithoutPassword);
-    
-    return userWithoutPassword;
-  },
-  
-  // Register a new user
-  register: async (name: string, email: string, password: string): Promise<User> => {
-    await delay();
-    
-    const users = getStoredUsers();
-    
-    // Check if email already exists
-    if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-      throw new Error('Email already in use');
-    }
-    
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
     // Create new user
     const newUser: StoredUser = {
       id: uuidv4(),
       name,
       email,
-<<<<<<< HEAD
       password: hashedPassword,
     };
 
@@ -241,23 +175,3 @@ export const authService = {
     clearUser();
   },
 };
-=======
-      password
-    };
-    
-    // Save to "database"
-    saveStoredUsers([...users, newUser]);
-    
-    // Don't include password in the returned user object
-    const { password: _, ...userWithoutPassword } = newUser;
-    saveUser(userWithoutPassword);
-    
-    return userWithoutPassword;
-  },
-  
-  // Logout the current user
-  logout: (): void => {
-    clearUser();
-  }
-};
->>>>>>> a63482dbbdf9e182d262652457bdd1bcf52bbf2d
